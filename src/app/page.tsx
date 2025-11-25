@@ -25,9 +25,9 @@ interface StoredData {
 
 // Prize configuration with weighted probabilities
 const PRIZES: Prize[] = [
-  { id: 1, name: 'Canned Soda', nameKo: '캔 음료(or 1,000원 할인)', color: '#FF6B6B', probability: 80, angle: 0 },
+  { id: 1, name: '1,000 KRW Discount', nameKo: '1,000원 할인', color: '#FF6B6B', probability: 80, angle: 0 },
   { id: 2, name: '2,000 KRW Discount', nameKo: '2,000원 할인', color: '#4ECDC4', probability: 15, angle: 120 },
-  { id: 3, name: '3000 KRW Discount', nameKo: '3,000원 할인', color: '#FFD93D', probability: 5, angle: 240 },
+  { id: 3, name: '3,000 KRW Discount', nameKo: '3,000원 할인', color: '#FFD93D', probability: 5, angle: 240 },
 ]
 
 // Naver Place URL (placeholder)
@@ -378,11 +378,17 @@ export default function RoulettePage() {
                   {selectedPrize.nameKo}
                 </div>
 
+                {selectedPrize.id === 1 && (
+                <div className="text-xs text-accent-mint font-semibold mb-2">
+                  ※ 음료수로 교환 가능
+                </div>
+                )}
+
                 <div className="text-wood-medium text-sm">
                   당첨 쿠폰
                 </div>
 
-                <div className="mt-6 pt-6 border-t border-gray-200">
+                <div className="mt-6 pt-6 border-t border-gray-200">                  
                   <div className="text-xs text-gray-400">
                     * 1회 사용 가능
                   </div>
