@@ -84,6 +84,7 @@ export default function RoulettePage() {
   const [selectedPrize, setSelectedPrize] = useState<Prize | null>(null)
   const [rotation, setRotation] = useState(0)
   const [isClient, setIsClient] = useState(false)
+  const [tapCount, setTapCount] = useState(0)
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -163,6 +164,20 @@ export default function RoulettePage() {
     setSelectedPrize(null)
     setRotation(0)
   }, [])
+
+  // Secret tap handler (for production testing)
+  const handleSecretTap = useCallback(() => {
+    const newCount = tapCount + 1
+    setTapCount(newCount)
+
+    if (newCount >= 5) {
+      handleReset()
+      setTapCount(0)
+    }
+
+    // Reset count after 2 seconds
+    setTimeout(() => setTapCount(0), 2000)
+  }, [tapCount, handleReset])
 
   if (!isClient) {
     return (
@@ -398,17 +413,27 @@ export default function RoulettePage() {
                 </div>
               </motion.div>
 
-              {/* Reset Button (for testing) */}
-              <button
-                onClick={handleReset}
-                className="mt-8 text-sm text-gray-400 underline"
-              >
-                (테스트용) 초기화
-              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Development Mode: Visible Reset Button */}
+      {process.env.NODE_ENV === 'development' && (
+        <button
+          onClick={handleReset}
+          className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg text-xs shadow-lg z-50 hover:bg-red-600 transition-colors"
+        >
+          🔄 초기화
+        </button>
+      )}
+
+      {/* Production Mode: Hidden tap area (tap 5 times to reset) */}
+      <div
+        onClick={handleSecretTap}
+        className="fixed top-0 left-0 w-20 h-20 z-50"
+        aria-hidden="true"
+      />
 
       {/* Footer */}
       <div className="absolute bottom-4 text-center text-xs text-wood-light">
